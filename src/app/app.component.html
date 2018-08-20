@@ -1,15 +1,42 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
-            hej
+        <div class="col-sm-12">
+            <h2>Swedish company name generator</h2>
+            <p>Welcome to the swedish company name generator! Here in Sweden, we love short names like volvo, ikea, klarna, kivra etc. 4 or 5 letter. Doesn't the name mean anything? Even Better! Go ahead and generate your own swedish company name.</p>
         </div>
         <div class="col-sm-4">
-            hej
+            <label>Pattern:</label>
+            <select class="form-control">
+                <option value="0">RANDOM!</option>
+                <option value="1">Ikea (vcvv)</option>
+                <option value="2">Saab (cvvc)</option>
+                <option value="3">Assa (vccv)</option>
+                <option value="4">Volvo (cvccv)</option>
+                <option value="5">Kivra (cvccv)</option>
+                <option value="6">Klarna (ccvccv)</option>
+            </select>
         </div>
         <div class="col-sm-4">
-            hej
+            <label>All different letters?</label>
+            <select class="form-control">
+                <option value="0">Yes!</option>
+                <option value="1">No!</option>
+            </select>
         </div>
+        <div class="col-sm-4">
+            <label>How many words to genrate:</label>
+            <input type="number" class="form-control">
+        </div>
+        <div class="col-sm-12">
+            <hr>
+            <button class="btn btn-secondary" (click)="randomize()">Generate!</button>
+            <hr>
+        </div>
+        <ng-container *ngIf="words.length > 0">
+            <div class="col-sm-4" *ngFor="let word of words">
+                {{ word }}
+            </div>
+        </ng-container>
     </div>
 </div>
 
