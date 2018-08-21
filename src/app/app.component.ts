@@ -9,60 +9,65 @@ export class AppComponent implements OnInit {
   	title = 'scng';
   	words: string[] = [];
 
+  	// 0 = consonant, 1 = vowel
+  	patterns: string[] = [
+  		'1011', // ikea
+  		'0110', // saab
+  		'1001', // assa
+  		'01001', // kivra
+  		'001001' // klarna
+  	];
+
+  	pIndex = 0;
+  	noRepeat = 'false';
+  	numOfWords = 100;
+  	
+  	consonants: string[] = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'];
+    vowels: string[] = ['a', 'e', 'i', 'o', 'u', 'y'];
+
   	ngOnInit() {
 
   	}
 
-  	randomize() {
+  	randomize(pIndex: number, numOfWords: number, noRepeat: boolean) {
+  		// console.log(this.pIndex);
+  		// console.log(this.noRepeat);
+  		// console.log('pIndex: ' + pIndex);
+  		// console.log('numOfWords: ' + numOfWords);
   		this.words = [];
         let word = '';
-        const consonants: string[] = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'];
-        const vowels: string[] = ['a', 'e', 'i', 'o', 'u', 'y'];
-
-        // length = 5
-        // pattern 1: kakaa // conea
-        // pattern 2: kakka // kivra, volvo
-        // pattern 3: 
-
-        // length = 4
-        // pattern 1: akaa // ikea
-        // pattern 2: kaak // saab
-        // pattern 3: akka // assa
 
         let i = 0;
-        let pattern = 2;
-        let wordLength = 5;
-        while (i < 100) {
-            let j = 0;
-            word = '';
+        while (i < this.numOfWords) {
+        	word = '';
+        	let j = 0;
+	        while (j < this.patterns[this.pIndex].length) {
+	        	let letter = '';
+	        	if (this.patterns[this.pIndex].charAt(j) == '0') {
+	        		letter = this.consonants[Math.floor(Math.random() * this.consonants.length)];
+	        	} else {
+	        		letter = this.vowels[Math.floor(Math.random() * this.vowels.length)];
+	        	}
 
-            while (j < wordLength) {
-            	if (wordLength == 5) {
-	                if (pattern == 1) {
-	                    if (j == 0 || j == 2) {
-	                        word += consonants[Math.floor(Math.random() * consonants.length)];
-	                    } else {
-	                        word += vowels[Math.floor(Math.random() * vowels.length)];
-	                    }
-	                } else if (pattern == 2) {
-	                    if (j == 0 || j == 2 || j == 3) {
-	                        word += consonants[Math.floor(Math.random() * consonants.length)];
-	                    } else {
-	                        word += vowels[Math.floor(Math.random() * vowels.length)];
-	                    }
-	                }
-            	} else if (wordLength == 4) {
+	        	if (this.noRepeat === 'true') {
+	        		if (word.indexOf(letter) === -1) {
+	        			word += letter;
+	        			j++;
+	        		} 
+	        	} else {
+	        		word += letter;
+	        		j++;
+	        	}
+	        	
+	        }
 
-            	}
-            	
-                j++;
-            }
-
-            // push if doesnt already exist
+            // push if word hasn't already been generated
             if (this.words.indexOf(word) === -1) {
             	this.words.push(word);
             	i++;
             }
         }
+
+        console.log(this.words);
   	}
 }

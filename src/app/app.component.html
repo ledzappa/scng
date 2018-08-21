@@ -6,30 +6,29 @@
         </div>
         <div class="col-sm-4">
             <label>Pattern:</label>
-            <select class="form-control">
-                <option value="0">RANDOM!</option>
-                <option value="1">Ikea (vcvv)</option>
-                <option value="2">Saab (cvvc)</option>
-                <option value="3">Assa (vccv)</option>
-                <option value="4">Volvo (cvccv)</option>
-                <option value="5">Kivra (cvccv)</option>
-                <option value="6">Klarna (ccvccv)</option>
+            <select class="form-control" [(ngModel)]="pIndex">
+                <option value="0">Ikea (vcvv)</option>
+                <option value="1">Saab (cvvc)</option>
+                <option value="2">Assa (vccv)</option>
+                <option value="3">Kivra (cvccv)</option>
+                <option value="4">Klarna (ccvccv)</option>
+                <option value="5">RANDOM!</option>
             </select>
         </div>
         <div class="col-sm-4">
-            <label>All different letters?</label>
-            <select class="form-control">
-                <option value="0">Yes!</option>
-                <option value="1">No!</option>
+            <label>Can a letter appear twice?</label>
+            <select class="form-control" [(ngModel)]="noRepeat">
+                <option value="false">OK!</option>
+                <option value="true">Nope!</option>
             </select>
         </div>
         <div class="col-sm-4">
             <label>How many words to genrate:</label>
-            <input type="number" class="form-control">
+            <input type="number" class="form-control" [(ngModel)]="numOfWords">
         </div>
         <div class="col-sm-12">
             <hr>
-            <button class="btn btn-secondary" (click)="randomize()">Generate!</button>
+            <button class="btn btn-secondary" (click)="randomize(1, 100, true)">Generate!</button>
             <hr>
         </div>
         <ng-container *ngIf="words.length > 0">
