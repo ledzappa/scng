@@ -26,8 +26,13 @@
             <label>How many words to genrate:</label>
             <input type="number" class="form-control" [(ngModel)]="numOfWords">
         </div>
+        <div class="col-sm-4">
+            <label>Starting point:</label>
+            <input type="text" class="form-control" [(ngModel)]="startingPoint">
+        </div>
         <div class="col-sm-12">
             <hr>
+            <div *ngIf="error != ''">{{ error }}</div>
             <button class="btn btn-secondary" (click)="randomize(1, 100, true)">Generate!</button>
             <hr>
         </div>
