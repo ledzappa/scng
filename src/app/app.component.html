@@ -1,46 +1,60 @@
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-            <h2>Swedish company name generator</h2>
-            <p>Welcome to the swedish company name generator! Here in Sweden, we love short names like volvo, ikea, klarna, kivra etc. 4 or 5 letter. Doesn't the name mean anything? Even Better! Go ahead and generate your own swedish company name.</p>
-        </div>
-        <div class="col-sm-4">
-            <label>Pattern:</label>
-            <select class="form-control" [(ngModel)]="pIndex">
-                <option value="0">Ikea (vcvv)</option>
-                <option value="1">Saab (cvvc)</option>
-                <option value="2">Assa (vccv)</option>
-                <option value="3">Kivra (cvccv)</option>
-                <option value="4">Klarna (ccvccv)</option>
-                <option value="5">RANDOM!</option>
-            </select>
-        </div>
-        <div class="col-sm-4">
-            <label>Can a letter appear twice?</label>
-            <select class="form-control" [(ngModel)]="noRepeat">
-                <option value="false">OK!</option>
-                <option value="true">Nope!</option>
-            </select>
-        </div>
-        <div class="col-sm-4">
-            <label>How many words to genrate:</label>
-            <input type="number" class="form-control" [(ngModel)]="numOfWords">
-        </div>
-        <div class="col-sm-4">
-            <label>Starting point:</label>
-            <input type="text" class="form-control" [(ngModel)]="startingPoint">
-        </div>
-        <div class="col-sm-12">
-            <hr>
-            <div *ngIf="error != ''">{{ error }}</div>
-            <button class="btn btn-secondary" (click)="randomize(1, 100, true)">Generate!</button>
-            <hr>
-        </div>
-        <ng-container *ngIf="words.length > 0">
-            <div class="col-sm-4" *ngFor="let word of words">
-                {{ word }}
-            </div>
-        </ng-container>
+<mat-sidenav-container [hasBackdrop]="false">
+  <mat-sidenav #sidenav
+    [opened]="true"
+    [mode]="'side'"
+    [fixedInViewport]="true"
+  >
+    <div class="col-sm-12">
+      <label>Pattern:</label>
+      <select class="form-control" [(ngModel)]="pIndex">
+        <option value="0">Ikea (vcvv)</option>
+        <option value="1">Saab (cvvc)</option>
+        <option value="2">Assa (vccv)</option>
+        <option value="3">Kivra (cvccv)</option>
+        <option value="4">Klarna (ccvccv)</option>
+        <option value="5">RANDOM!</option>
+      </select>
     </div>
-</div>
+    <div class="col-sm-12">
+      <label>Can a letter appear twice?</label>
+      <select class="form-control" [(ngModel)]="noRepeat">
+        <option value="false">OK!</option>
+        <option value="true">Nope!</option>
+      </select>
+    </div>
+    <div class="col-sm-12">
+      <label>How many words to genrate:</label>
+      <input type="number" class="form-control" [(ngModel)]="numOfWords" />
+    </div>
+    <div class="col-sm-12">
+      <label>Starting point:</label>
+      <input type="text" class="form-control" [(ngModel)]="startingPoint" />
+    </div>
+    <div class="col-sm-12">
+      <hr />
+      <div *ngIf="error != ''">{{ error }}</div>
+      <button class="btn btn-secondary" (click)="randomize(1, 100, true)">
+        Generate!
+      </button>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="row">
+      <div class="col-sm-12">
+        <h2 (click)="sidenav.open()">Swedish company name generator</h2>
+        <p (click)="sidenav.close()">
+          Welcome to the swedish company name generator! Here in Sweden, we love
+          short names like volvo, ikea, klarna, kivra etc. 4 or 5 letter.
+          Doesn't the name mean anything? Even Better! Go ahead and generate
+          your own swedish company name.
+        </p>
+      </div>
 
+      <ng-container *ngIf="words.length > 0">
+        <div class="col-sm-4" *ngFor="let word of words">
+          {{ word }}
+        </div>
+      </ng-container>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
