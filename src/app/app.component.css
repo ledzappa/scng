@@ -1,3 +1,14 @@
 .container {
-	padding-top: 2rem;
+  padding-top: 2rem;
+}
+
+h2 img {
+  float: left;
+  margin-right: 0.5rem;
+  width: 68px;
+}
+
+.alert-danger-custom {
+  background-color: #e41111;
+  color: white;
 }

@@ -1,4 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 html {
   height: 100%;
 }
@@ -6,4 +7,28 @@ html {
 body {
   background-color: #4c44c7;
   color: #fff;
+}
+
+mat-sidenav {
+  width: 300px;
+}
+
+.mat-drawer {
+  background-color: #4f54f7;
+  color: #fff;
+}
+
+.mat-drawer-container {
+  background-color: #4c44c7;
+  color: #fff;
+}
+
+.mat-slider-horizontal {
+  width: 228px;
+}
+
+label {
+  margin-bottom: 0rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
 }
