@@ -78,17 +78,19 @@ export class AppComponent implements OnInit {
         let letter = '';
 
         if (pattern.charAt(j) == 'C') {
-          // generate consonant
+          // random consonant
           letter = this.consonants[
             Math.floor(Math.random() * this.consonants.length)
           ];
         } else if (pattern.charAt(j) == 'V') {
-          // generate vowel
+          // random vowel
           letter = this.vowels[Math.floor(Math.random() * this.vowels.length)];
         } else if (pattern.charAt(j) === '*') {
+          // random letter
           const a = [...this.vowels, ...this.consonants];
           letter = a[Math.floor(Math.random() * a.length)];
         } else {
+          // keep letter
           letter = pattern.charAt(j);
         }
 

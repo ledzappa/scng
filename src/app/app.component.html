@@ -45,9 +45,9 @@
             (click)="randomize()"
             [disabled]="
               customPattern.length > 0 &&
-              (customPattern.indexOf('*') === -1 &&
-                customPattern.indexOf('C') === -1 &&
-                customPattern.indexOf('V') === -1)
+              customPattern.indexOf('*') === -1 &&
+              customPattern.indexOf('C') === -1 &&
+              customPattern.indexOf('V') === -1
             "
           >
             Generate!
