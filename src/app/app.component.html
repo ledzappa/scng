@@ -10,7 +10,11 @@
       <div class="row">
         <div class="col-sm-12">
           <label>Pattern:</label>
-          <select class="form-control" [(ngModel)]="pIndex">
+          <select
+            class="form-control"
+            [(ngModel)]="pIndex"
+            [disabled]="customPattern.length > 0"
+          >
             <option value="0">Ikea (vcvv)</option>
             <option value="1">Saab (cvvc)</option>
             <option value="2">Assa (vccv)</option>
@@ -33,10 +37,19 @@
           <div>
             <mat-slide-toggle [(ngModel)]="noRepeat"></mat-slide-toggle>
           </div>
-          <label>Starting point:</label>
-          <input type="text" class="form-control" [(ngModel)]="startingPoint" />
+          <label>Custom pattern:</label>
+          <input type="text" class="form-control" [(ngModel)]="customPattern" />
           <hr />
-          <button class="btn btn-primary" (click)="randomize()">
+          <button
+            class="btn btn-primary"
+            (click)="randomize()"
+            [disabled]="
+              customPattern.length > 0 &&
+              (customPattern.indexOf('*') === -1 &&
+                customPattern.indexOf('C') === -1 &&
+                customPattern.indexOf('V') === -1)
+            "
+          >
             Generate!
           </button>
         </div>
@@ -46,7 +59,7 @@
   <mat-sidenav-content>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 pt-3">
           <h2 class="mt-2 d-inline-block text-warning" (click)="sidenav.open()">
             <img src="./../assets/swedish_flag.svg" /> Swedish company name
             generator
@@ -57,7 +70,11 @@
             Doesn't the name mean anything? Even Better! Go ahead and generate
             your own swedish company name.
           </p>
-          <div *ngIf="error != ''" class="alert alert-danger-custom animated flash" role="alert">
+          <div
+            *ngIf="error != ''"
+            class="alert alert-danger-custom animated flash"
+            role="alert"
+          >
             {{ error }}
           </div>
         </div>

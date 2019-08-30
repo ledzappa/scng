@@ -11,18 +11,18 @@ export class AppComponent implements OnInit {
 
   // 0 = consonant, 1 = vowel
   patterns: string[] = [
-    '1011', // ikea
-    '0110', // saab
-    '1001', // assa
-    '01001', // kivra
-    '001001' // klarna
+    'VCVV', // ikea
+    'CVVC', // saab
+    'VCCV', // assa
+    'CVCCV', // kivra
+    'CCVCCV' // klarna
   ];
 
-  error: string = '';
+  error = '';
   pIndex = 0;
   noRepeat = true;
   numOfWords = 100;
-  startingPoint = '';
+  customPattern = '';
   wordsGenerated = 0;
 
   consonants: string[] = [
@@ -52,55 +52,54 @@ export class AppComponent implements OnInit {
   ngOnInit() {}
 
   randomize() {
-    console.log('start');
-    // console.log(this.pIndex);
-    // console.log(this.noRepeat);
-    // console.log('pIndex: ' + pIndex);
-    // console.log('numOfWords: ' + numOfWords);
     this.error = '';
     this.words = [];
     this.wordsGenerated = 0;
     let failedAttempts = 0;
     let word = '';
+    let pattern = '';
+
+    if (this.customPattern.length > 0) {
+      pattern = this.customPattern;
+    } else {
+      pattern = this.patterns[this.pIndex];
+    }
 
     let i = 0;
     while (i < this.numOfWords && failedAttempts < 1000) {
-      let timeoutHandle = setTimeout(() => {
+      const timeoutHandle = setTimeout(() => {
         return false;
       }, 5000);
 
-      if (this.startingPoint.length > 0) {
-        word = this.startingPoint;
-      } else {
-        word = '';
-      }
+      word = '';
 
       let j = 0;
-      while (
-        j <
-        this.patterns[this.pIndex].length - this.startingPoint.length
-      ) {
+      while (j < pattern.length) {
         let letter = '';
-        if (
-          this.patterns[this.pIndex].charAt(j + this.startingPoint.length) ==
-          '0'
-        ) {
+
+        if (pattern.charAt(j) == 'C') {
+          // generate consonant
           letter = this.consonants[
             Math.floor(Math.random() * this.consonants.length)
           ];
-        } else {
+        } else if (pattern.charAt(j) == 'V') {
+          // generate vowel
           letter = this.vowels[Math.floor(Math.random() * this.vowels.length)];
+        } else if (pattern.charAt(j) === '*') {
+          const a = [...this.vowels, ...this.consonants];
+          letter = a[Math.floor(Math.random() * a.length)];
+        } else {
+          letter = pattern.charAt(j);
         }
 
         if (this.noRepeat) {
           if (word.indexOf(letter) === -1) {
             word += letter;
-            j++;
           }
         } else {
           word += letter;
-          j++;
         }
+        j++;
       }
 
       // push if word hasn't already been generated
@@ -113,10 +112,9 @@ export class AppComponent implements OnInit {
       }
     }
 
-    if (failedAttempts == 1000) {
+    if (failedAttempts === 1000) {
       this.error =
-        'Whops! Ran out of words :( (' + this.words.length + ' generated)';
+        'Whops! Ran out of words (' + this.words.length + ' words generated)';
     }
-    console.log('end');
   }
 }
