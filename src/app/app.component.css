@@ -12,3 +12,24 @@ h2 img {
   background-color: #e41111;
   color: white;
 }
+
+ul {
+  padding-inline-start: 0px;
+}
+
+ul li {
+  list-style: none;
+}
+
+ul mark {
+  padding: 0.2em;
+  width: 2rem;
+  text-align: center;
+  display: inline-block;
+  background-color: #fcf8e3;
+  margin-right: 0.5rem;
+}
+
+.pointer {
+  cursor: pointer;
+}

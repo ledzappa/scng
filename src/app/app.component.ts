@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, fromEvent } from 'rxjs';
+import { debounceTime, map, startWith } from 'rxjs/operators';
+import { stripGeneratedFileSuffix } from '@angular/compiler/src/aot/util';
 
 @Component({
   selector: 'app-root',
@@ -8,22 +11,39 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'The Swedish company name generator';
   words: string[] = [];
-
-  // 0 = consonant, 1 = vowel
-  patterns: string[] = [
-    'VCVV', // ikea
-    'CVVC', // saab
-    'VCCV', // assa
-    'CVCCV', // kivra
-    'CCVCCV' // klarna
-  ];
+  windowWidth = null;
+  width$: Observable<any>;
 
   error = '';
   pIndex = 0;
   noRepeat = true;
   numOfWords = 100;
-  customPattern = '';
+  pattern = '@#@@';
   wordsGenerated = 0;
+  savedWords: string[] = [];
+
+  presets = [
+    {
+      name: 'Ikea',
+      value: '@#@@'
+    },
+    {
+      name: 'Saab',
+      value: '#@@#'
+    },
+    {
+      name: 'Assa',
+      value: '@##@'
+    },
+    {
+      name: 'Kivra',
+      value: '#@##@'
+    },
+    {
+      name: 'Klarna',
+      value: '##@##@'
+    }
+  ];
 
   consonants: string[] = [
     'b',
@@ -49,7 +69,23 @@ export class AppComponent implements OnInit {
   ];
   vowels: string[] = ['a', 'e', 'i', 'o', 'u', 'y'];
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.width$ = fromEvent(window, 'resize').pipe(
+      debounceTime(100),
+      map((event: any) => event.target.innerWidth),
+      startWith(window.innerWidth)
+    );
+  }
+
+  saveWord(word: string) {
+    if (this.savedWords.indexOf(word) === -1) {
+      this.savedWords.push(word);
+    }
+  }
+
+  removeWord(index: number) {
+    this.savedWords.splice(index, 1);
+  }
 
   randomize() {
     this.error = '';
@@ -57,13 +93,6 @@ export class AppComponent implements OnInit {
     this.wordsGenerated = 0;
     let failedAttempts = 0;
     let word = '';
-    let pattern = '';
-
-    if (this.customPattern.length > 0) {
-      pattern = this.customPattern;
-    } else {
-      pattern = this.patterns[this.pIndex];
-    }
 
     let i = 0;
     while (i < this.numOfWords && failedAttempts < 1000) {
@@ -74,24 +103,24 @@ export class AppComponent implements OnInit {
       word = '';
 
       let j = 0;
-      while (j < pattern.length) {
+      while (j < this.pattern.length) {
         let letter = '';
 
-        if (pattern.charAt(j) == 'C') {
+        if (this.pattern.charAt(j) === '#') {
           // random consonant
           letter = this.consonants[
             Math.floor(Math.random() * this.consonants.length)
           ];
-        } else if (pattern.charAt(j) == 'V') {
+        } else if (this.pattern.charAt(j) === '@') {
           // random vowel
           letter = this.vowels[Math.floor(Math.random() * this.vowels.length)];
-        } else if (pattern.charAt(j) === '*') {
+        } else if (this.pattern.charAt(j) === '*') {
           // random letter
           const a = [...this.vowels, ...this.consonants];
           letter = a[Math.floor(Math.random() * a.length)];
         } else {
           // keep letter
-          letter = pattern.charAt(j);
+          letter = this.pattern.charAt(j);
         }
 
         if (this.noRepeat) {
@@ -118,5 +147,35 @@ export class AppComponent implements OnInit {
       this.error =
         'Whops! Ran out of words (' + this.words.length + ' words generated)';
     }
+  }
+
+  shuffle() {
+    const shuffledWords = [];
+    let i = 0;
+    while (i < 50) {
+      const shuffledWord = this.shuffleString(this.pattern);
+      if (shuffledWords.indexOf(shuffledWord) === -1) {
+        shuffledWords.push(shuffledWord);
+      }
+      i++;
+    }
+    this.words = shuffledWords;
+  }
+
+  shuffleString(string: string) {
+    let shuffledString = '';
+    let randomChar = '';
+    // set initialLength since we will mutate string and its length will change
+    const initLength = string.length;
+
+    for (let i = 0; i < initLength; i++) {
+      // get random char from string
+      randomChar = string.charAt(Math.floor(Math.random() * string.length));
+      // append random char to string
+      shuffledString += randomChar;
+      // remove random char before next iteration
+      string = string.replace(randomChar, '');
+    }
+    return shuffledString;
   }
 }

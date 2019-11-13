@@ -1,35 +1,36 @@
 <mat-sidenav-container [hasBackdrop]="false">
   <mat-sidenav
-    class="pt-4"
     #sidenav
-    [opened]="true"
-    [mode]="'side'"
+    class="pt-4"
+    [opened]="(width$ | async) > 576"
+    [mode]="(width$ | async) > 576 ? 'push' : 'over'"
     [fixedInViewport]="true"
   >
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-12">
-          <label>Presets:</label>
-          <select
-            class="form-control"
-            [(ngModel)]="pIndex"
-            [disabled]="customPattern.length > 0"
+          <div
+            *ngIf="(width$ | async) > 576 === false"
+            (click)="sidenav.close()"
           >
-            <option value="0">Ikea (vcvv)</option>
-            <option value="1">Saab (cvvc)</option>
-            <option value="2">Assa (vccv)</option>
-            <option value="3">Kivra (cvccv)</option>
-            <option value="4">Klarna (ccvccv)</option>
-            <option value="5">RANDOM!</option>
+            Close
+          </div>
+          <label>Presets:</label>
+          <select class="form-control" (change)="pattern = $event.target.value">
+            <ng-container *ngFor="let preset of presets">
+              <option value="{{ preset.value }}">{{ preset.name }}</option>
+            </ng-container>
           </select>
+          <label>Pattern:</label>
+          <input type="text" class="form-control" [(ngModel)]="pattern" />
           <label>Number of words:</label>
           <div class="text-center">
             <mat-slider
               [(ngModel)]="numOfWords"
-              [max]="1000"
-              [min]="100"
-              [step]="100"
-              [value]="100"
+              [max]="100"
+              [min]="10"
+              [step]="10"
+              [value]="10"
             ></mat-slider
             >{{ numOfWords }}
           </div>
@@ -37,21 +38,45 @@
           <div>
             <mat-slide-toggle [(ngModel)]="noRepeat"></mat-slide-toggle>
           </div>
-          <label>Pattern:</label>
-          <input type="text" class="form-control" [(ngModel)]="customPattern" />
           <hr />
           <button
-            class="btn btn-primary"
-            (click)="randomize()"
-            [disabled]="
-              customPattern.length > 0 &&
-              customPattern.indexOf('*') === -1 &&
-              customPattern.indexOf('C') === -1 &&
-              customPattern.indexOf('V') === -1
+            *ngIf="
+              pattern.length === 0 ||
+              pattern.indexOf('*') > -1 ||
+              pattern.indexOf('#') > -1 ||
+              pattern.indexOf('@') > -1
             "
+            class="btn btn-primary w-100"
+            (click)="randomize()"
+            [disabled]="pattern.length === 0"
           >
             Generate!
           </button>
+          <button
+            *ngIf="
+              pattern.indexOf('*') === -1 &&
+              pattern.indexOf('#') === -1 &&
+              pattern.indexOf('@') === -1
+            "
+            class="btn btn-primary w-100"
+            (click)="shuffle()"
+          >
+            Shuffle!
+          </button>
+          <hr />
+          <p>
+            Build your pattern using letters combined with the following special
+            characters:
+          </p>
+          <ul>
+            <li><mark>#</mark> Consonant</li>
+            <li><mark>@</mark> Vowel</li>
+            <li><mark>*</mark> Consonant or Vowel</li>
+          </ul>
+          <p>
+            If no special characters are included, the provided input will
+            instead get shuffled into a series of anagrams.
+          </p>
         </div>
       </div>
     </div>
@@ -70,6 +95,17 @@
             Doesn't the name mean anything? Even Better! Go ahead and generate
             your own swedish company name.
           </p>
+          <ng-container *ngIf="savedWords.length > 0">
+            <hr />
+            <h6
+              class="d-inline-block mr-2 pointer"
+              *ngFor="let word of savedWords; let i = index"
+              (click)="removeWord(i)"
+            >
+              {{ word }}
+            </h6>
+            <hr />
+          </ng-container>
           <div
             *ngIf="error != ''"
             class="alert alert-danger-custom animated flash"
@@ -80,8 +116,12 @@
         </div>
 
         <ng-container *ngIf="words.length > 0">
-          <div class="col-sm-4" *ngFor="let word of words">
-            {{ word }}
+          <div
+            class="col-sm-4"
+            *ngFor="let word of words"
+            (click)="saveWord(word); shuffleString(word)"
+          >
+            <h6 class="d-inline-block pointer">{{ word }}</h6>
           </div>
         </ng-container>
       </div>
