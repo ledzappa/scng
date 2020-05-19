@@ -5,7 +5,7 @@ import { debounceTime, map, startWith, tap } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   title = 'The Swedish company name generator';
@@ -23,24 +23,24 @@ export class AppComponent implements OnInit {
   presets = [
     {
       name: 'Ikea',
-      value: '@#@@'
+      value: '@#@@',
     },
     {
       name: 'Saab',
-      value: '#@@#'
+      value: '#@@#',
     },
     {
       name: 'Assa',
-      value: '@##@'
+      value: '@##@',
     },
     {
       name: 'Kivra',
-      value: '#@##@'
+      value: '#@##@',
     },
     {
       name: 'Klarna',
-      value: '##@##@'
-    }
+      value: '##@##@',
+    },
   ];
 
   consonants: string[] = [
@@ -63,26 +63,37 @@ export class AppComponent implements OnInit {
     'v',
     'w',
     'x',
-    'z'
+    'z',
   ];
   vowels: string[] = ['a', 'e', 'i', 'o', 'u', 'y'];
 
   ngOnInit() {
-    fromEvent(window, 'resize').pipe(
-      debounceTime(100),
-      tap((event: any) => this.isSmallDevice = event.target.innerWidth < 576),
-      startWith(window.innerWidth)
-    ).subscribe();
+    this.savedWords = JSON.parse(window.localStorage.getItem('scng')) || [];
+    fromEvent(window, 'resize')
+      .pipe(
+        debounceTime(100),
+        tap(
+          (event: any) => (this.isSmallDevice = event.target.innerWidth < 576)
+        ),
+        startWith(window.innerWidth)
+      )
+      .subscribe();
   }
 
   saveWord(word: string) {
     if (this.savedWords.indexOf(word) === -1) {
       this.savedWords.push(word);
+      this.updateLocalStorage();
     }
   }
 
   removeWord(index: number) {
     this.savedWords.splice(index, 1);
+    this.updateLocalStorage();
+  }
+
+  updateLocalStorage() {
+    window.localStorage.setItem('scng', JSON.stringify(this.savedWords));
   }
 
   randomize() {

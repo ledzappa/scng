@@ -56,7 +56,7 @@
               pattern.indexOf('@') === -1
             "
             class="btn btn-primary w-100"
-            (click)="shuffle(); sidenav.close()"
+            (click)="shuffle(); isSmallDevice && sidenav.close()"
           >
             Shuffle!
           </button>
@@ -86,10 +86,7 @@
             <img class="pr-1" src="assets/swedish_flag.svg" /> SCNG&trade;
           </h2>
           <div class="alert alert-info alert-icon">
-            Welcome to the swedish company name generator! Here in Sweden, we
-            love short names like volvo, ikea, klarna, kivra etc. 4 or 5 letter.
-            Doesn't the name mean anything? Even Better! Go ahead and generate
-            your own swedish company name.
+            Welcome to the swedish company name generator! Go ahead and generate some random sequences of letters until you find the perfect company name.
           </div>
           <ng-container *ngIf="savedWords.length > 0">
             <hr />
@@ -113,7 +110,7 @@
 
         <ng-container *ngIf="words.length > 0">
           <div
-            class="col-sm-4"
+            class="col-6 col-md-4 col-lg-3"
             *ngFor="let word of words"
             (click)="saveWord(word); shuffleString(word)"
           >
