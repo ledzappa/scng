@@ -1,8 +1,6 @@
-# Scng
+## Scng
 
-An angular application that generate words! Choose between different patterns inspired by popular swedish company names, or specify your own custom pattern and generate away! 
 
-# How?
+What does the words qoewo, weify, hooni, taimo, noto, bemo, and menea have in common? They could probably all be Swedish company names and they were definitely all generated with this application.
 
-1. npm install
-2. ng serve
+[https://ledzappa.github.io/scng/](https://ledzappa.github.io/scng/)
