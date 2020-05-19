@@ -33,3 +33,7 @@ ul mark {
 .pointer {
   cursor: pointer;
 }
+
+mat-sidenav-content {
+  margin-right: 0 !important;
+}

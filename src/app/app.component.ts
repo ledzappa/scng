@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, fromEvent } from 'rxjs';
-import { debounceTime, map, startWith } from 'rxjs/operators';
-import { stripGeneratedFileSuffix } from '@angular/compiler/src/aot/util';
+import { debounceTime, map, startWith, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +10,11 @@ import { stripGeneratedFileSuffix } from '@angular/compiler/src/aot/util';
 export class AppComponent implements OnInit {
   title = 'The Swedish company name generator';
   words: string[] = [];
-  windowWidth = null;
   width$: Observable<any>;
-
   error = '';
   pIndex = 0;
   noRepeat = true;
+  isSmallDevice = false;
   numOfWords = 100;
   pattern = '@#@@';
   wordsGenerated = 0;
@@ -70,11 +68,11 @@ export class AppComponent implements OnInit {
   vowels: string[] = ['a', 'e', 'i', 'o', 'u', 'y'];
 
   ngOnInit() {
-    this.width$ = fromEvent(window, 'resize').pipe(
+    fromEvent(window, 'resize').pipe(
       debounceTime(100),
-      map((event: any) => event.target.innerWidth),
+      tap((event: any) => this.isSmallDevice = event.target.innerWidth < 576),
       startWith(window.innerWidth)
-    );
+    ).subscribe();
   }
 
   saveWord(word: string) {

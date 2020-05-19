@@ -5,11 +5,12 @@ html {
 }
 
 body {
+  height: 100%;
   color: #000;
 }
 
 mat-sidenav {
-  background-color: #eae9ff !important;
+  background-color: #ececec !important;
   width: 300px;
 }
 
