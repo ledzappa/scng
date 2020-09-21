@@ -10,7 +10,7 @@ import { debounceTime, map, startWith, tap } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   title = 'The Swedish company name generator';
   width$: Observable<any>;
-  isSmallDevice$: Observable<boolean>;
+  isSmallDevice: boolean;
   words: string[] = [];
   savedWords: string[] = [];
   pattern = '@#@@';
@@ -69,11 +69,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.savedWords = JSON.parse(window.localStorage.getItem('scng')) || [];
-    this.isSmallDevice$ = fromEvent(window, 'resize').pipe(
-      debounceTime(100),
-      map((event: any) => event.target.innerWidth < 576),
-      startWith(window.innerWidth < 576)
-    );
+    this.isSmallDevice = window.innerWidth < 576;
+    fromEvent(window, 'resize')
+      .pipe(
+        debounceTime(100),
+        tap(
+          (event: any) => (this.isSmallDevice = event.target.innerWidth < 576)
+        )
+      )
+      .subscribe();
   }
 
   saveWord(word: string) {

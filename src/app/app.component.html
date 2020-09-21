@@ -2,14 +2,14 @@
   <mat-sidenav
     #sidenav
     class="pt-4"
-    [opened]="!(isSmallDevice$ | async)"
-    [mode]="(isSmallDevice$ | async) ? 'over' : 'push'"
+    [opened]="!isSmallDevice"
+    [mode]="!isSmallDevice ? 'push' : 'over'"
     [fixedInViewport]="true"
   >
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-12">
-          <div (click)="sidenav.close()">
+          <div *ngIf="!isSmallDevice === false" (click)="sidenav.close()">
             Close
           </div>
           <label>Presets:</label>
@@ -44,7 +44,7 @@
               pattern.indexOf('@') > -1
             "
             class="btn btn-primary w-100"
-            (click)="randomize()"
+            (click)="randomize(); isSmallDevice && sidenav.close()"
             [disabled]="pattern.length === 0"
           >
             Generate!
@@ -56,7 +56,7 @@
               pattern.indexOf('@') === -1
             "
             class="btn btn-primary w-100"
-            (click)="shuffle()"
+            (click)="shuffle(); isSmallDevice && sidenav.close()"
           >
             Shuffle!
           </button>
