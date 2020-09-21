@@ -2,8 +2,8 @@
   <mat-sidenav
     #sidenav
     class="pt-4"
-    [opened]="!isSmallDevice"
-    [mode]="!isSmallDevice ? 'push' : 'over'"
+    [opened]="!(isSmallDevice$ | async)"
+    [mode]="(isSmallDevice$ | async) ? 'over' : 'push'"
     [fixedInViewport]="true"
   >
     <div class="container-fluid">
@@ -44,7 +44,7 @@
               pattern.indexOf('@') > -1
             "
             class="btn btn-primary w-100"
-            (click)="randomize(); isSmallDevice && sidenav.close()"
+            (click)="randomize()"
             [disabled]="pattern.length === 0"
           >
             Generate!
@@ -56,7 +56,7 @@
               pattern.indexOf('@') === -1
             "
             class="btn btn-primary w-100"
-            (click)="shuffle(); isSmallDevice && sidenav.close()"
+            (click)="shuffle()"
           >
             Shuffle!
           </button>
